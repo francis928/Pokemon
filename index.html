@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Dashboard - Bulbasaur</title>
+    <title>Mega Pokémon Dashboard</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,14 +15,19 @@
         
         .dashboard {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 200px 1fr;
             min-height: 100vh;
         }
         
-        .sidebar {
+        .type-sidebar {
             background-color: #2c3e50;
             color: white;
             padding: 20px;
+        }
+        
+        .type-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #34495e;
         }
         
         .main-content {
@@ -30,154 +35,283 @@
             background-color: white;
         }
         
-        .pokemon-header {
-            background-color: #4CAF50;
+        .pokemon-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .pokemon-option {
+            padding: 8px 16px;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pokemon-option:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .pokemon-option.active {
+            background-color: #5d5dff;
             color: white;
-            padding: 15px;
-            border-radius: 5px;
+        }
+        
+        .pokemon-header {
+            background: linear-gradient(135deg, #5d5dff 0%, #3636a0 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
             margin-bottom: 20px;
         }
         
-        .pokemon-stats {
+        .type-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .stats-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-bottom: 20px;
         }
         
-        .stat-card {
+        .stat-column {
             background-color: #f9f9f9;
-            border-radius: 5px;
+            border-radius: 8px;
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 5px;
+        .stat-row {
+            margin-bottom: 15px;
         }
         
-        .progress {
-            height: 100%;
-            background-color: #4CAF50;
-            border-radius: 5px;
+        .stat-name {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         
-        .about-section {
-            margin-bottom: 20px;
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
         }
         
-        .nav-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #34495e;
-            cursor: pointer;
-        }
-        
-        .nav-item:hover {
-            color: #4CAF50;
-        }
-        
-        .menu-title {
-            color: #95a5a6;
-            font-size: 14px;
+        .pokemon-description {
             margin-top: 20px;
-            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
     <div class="dashboard">
-        <div class="sidebar">
-            <h2>Poko</h2>
-            
-            <div class="menu-title">Water Gigland</div>
-            <div class="nav-item">Stroke</div>
-            <div class="nav-item">Clean</div>
-            <div class="nav-item">Lick 30</div>
-            
-            <div class="menu-title">Batch</div>
-            <div class="nav-item">My Pokemon</div>
-            
-            <div class="menu-title">Profile</div>
-            <div class="nav-item">Piano Market</div>
-            <div class="nav-item">World Map</div>
-            <div class="nav-item">Log Out</div>
+        <div class="type-sidebar">
+            <div class="type-item">NORMAL</div>
+            <div class="type-item">2.3m</div>
+            <div class="type-item">127.0kg</div>
+            <div class="type-item">FIGHTING</div>
+            <div class="type-item">FLYING</div>
+            <div class="type-item">POISON</div>
+            <div class="type-item">GROUND</div>
+            <div class="type-item">ROCK</div>
+            <div class="type-item">BUG</div>
+            <div class="type-item">GHOST</div>
+            <div class="type-item">STEEL</div>
+            <div class="type-item">FIRE</div>
+            <div class="type-item">WATER</div>
+            <div class="type-item">GRASS</div>
+            <div class="type-item">ELECTRIC</div>
+            <div class="type-item">PSYCHIC</div>
+            <div class="type-item">ICE</div>
         </div>
         
         <div class="main-content">
-            <div class="pokemon-header">
-                <h1>Bulbasaur</h1>
-                <p>Instant on: Lick 4</p>
+            <div class="pokemon-selector">
+                <div class="pokemon-option active" onclick="showPokemon('mewtwo')">Mega Mewtwo X</div>
+                <div class="pokemon-option" onclick="showPokemon('heracross')">Mega Heracross</div>
+                <div class="pokemon-option" onclick="showPokemon('blaziken')">Mega Blaziken</div>
             </div>
             
-            <div class="pokemon-stats">
-                <div class="stat-card">
-                    <h3>Height</h3>
-                    <p>2" bit*</p>
-                </div>
-                
-                <div class="stat-card">
-                    <h3>Weight</h3>
-                    <p>142 lbs</p>
-                </div>
-                
-                <div class="stat-card">
-                    <h3>Category</h3>
-                    <p>Seed</p>
-                </div>
-                
-                <div class="stat-card">
-                    <h3>Abilities</h3>
-                    <p>Overgrow</p>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <h3>Scoreboard</h3>
-                <p>Wave 1</p>
-            </div>
-            
-            <div class="stat-card">
-                <h3>Learn</h3>
-                <p>15</p>
-            </div>
-            
-            <div class="about-section">
-                <h2>About Bulbasaur</h2>
-                <p>Bulbasaur can be seen indoors in bright sunlight. There is a spot on its back. By looking up the sun's rays, the seed grows progressively bigger.</p>
-                <p>Bulbasaur can evolve after Mr.5 rain forster.</p>
-            </div>
-            
-            <div class="stat-card">
-                <h2>Attack</h2>
-                <div>
-                    <h3>Height</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 60%;"></div>
-                    </div>
-                </div>
-                <div>
-                    <h3>Defense</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 45%;"></div>
-                    </div>
-                </div>
-                <div>
-                    <h3>Speed</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 30%;"></div>
-                    </div>
-                </div>
-                <div>
-                    <h3>Ability</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 75%;"></div>
-                    </div>
-                </div>
+            <div id="pokemon-content">
+                <!-- Content will be loaded here by JavaScript -->
             </div>
         </div>
     </div>
+
+    <script>
+        // Pokémon data
+        const pokemonData = {
+            mewtwo: {
+                name: "Mega Mewtwo X",
+                category: "Genetic Pokémon",
+                types: ["FIGHTING", "PSYCHIC"],
+                ability: "Steadfast",
+                stats: {
+                    hp: 106,
+                    attack: 190,
+                    defense: 100,
+                    specialAttack: 154,
+                    specialDefense: 100,
+                    speed: 130
+                },
+                color: "#5d5dff"
+            },
+            heracross: {
+                name: "Mega Heracross",
+                category: "Single Horn Pokémon",
+                types: ["FIGHTING", "BUG"],
+                ability: "Skill Link",
+                stats: {
+                    hp: 80,
+                    attack: 185,
+                    defense: 115,
+                    specialAttack: 40,
+                    specialDefense: 105,
+                    speed: 75
+                },
+                color: "#c03028"
+            },
+            blaziken: {
+                name: "Mega Blaziken",
+                category: "Blaze Pokémon",
+                types: ["FIRE", "FIGHTING"],
+                ability: "Speed Boost",
+                stats: {
+                    hp: 80,
+                    attack: 160,
+                    defense: 80,
+                    specialAttack: 130,
+                    specialDefense: 80,
+                    speed: 100
+                },
+                color: "#f08030"
+            }
+        };
+
+        // Type colors
+        const typeColors = {
+            NORMAL: "#A8A878",
+            FIGHTING: "#C03028",
+            FLYING: "#A890F0",
+            POISON: "#A040A0",
+            GROUND: "#E0C068",
+            ROCK: "#B8A038",
+            BUG: "#A8B820",
+            GHOST: "#705898",
+            STEEL: "#B8B8D0",
+            FIRE: "#F08030",
+            WATER: "#6890F0",
+            GRASS: "#78C850",
+            ELECTRIC: "#F8D030",
+            PSYCHIC: "#F85888",
+            ICE: "#98D8D8",
+            DRAGON: "#7038F8",
+            DARK: "#705848",
+            FAIRY: "#EE99AC"
+        };
+
+        // Show selected Pokémon
+        function showPokemon(pokemonId) {
+            const pokemon = pokemonData[pokemonId];
+            
+            // Update active selection
+            document.querySelectorAll('.pokemon-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content
+            document.getElementById('pokemon-content').innerHTML = `
+                <div class="pokemon-header" style="background: linear-gradient(135deg, ${pokemon.color} 0%, ${darkenColor(pokemon.color, 20)} 100%)">
+                    <h1>${pokemon.name}</h1>
+                    <p>${pokemon.category}</p>
+                    <div>
+                        ${pokemon.types.map(type => `
+                            <span class="type-tag" style="background-color: ${typeColors[type]}">${type}</span>
+                        `).join('')}
+                    </div>
+                    <p>Ability: <strong>${pokemon.ability}</strong></p>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-column">
+                        <div class="stat-row">
+                            <div class="stat-name">HP</div>
+                            <div class="stat-value">${pokemon.stats.hp}</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Attack</div>
+                            <div class="stat-value">${pokemon.stats.attack}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-column">
+                        <div class="stat-row">
+                            <div class="stat-name">Defense</div>
+                            <div class="stat-value">${pokemon.stats.defense}</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Special Attack</div>
+                            <div class="stat-value">${pokemon.stats.specialAttack}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-column">
+                        <div class="stat-row">
+                            <div class="stat-name">Special Defense</div>
+                            <div class="stat-value">${pokemon.stats.specialDefense}</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Speed</div>
+                            <div class="stat-value">${pokemon.stats.speed}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pokemon-description">
+                    <h3>Pokédex Entry</h3>
+                    <p>${getPokedexEntry(pokemonId)}</p>
+                </div>
+            `;
+        }
+
+        // Helper function to darken colors
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (
+                0x1000000 +
+                (R < 0 ? 0 : R) * 0x10000 +
+                (G < 0 ? 0 : G) * 0x100 +
+                (B < 0 ? 0 : B)
+            ).toString(16).slice(1);
+        }
+
+        // Pokédex entries
+        function getPokedexEntry(pokemonId) {
+            const entries = {
+                mewtwo: "Mega Mewtwo X's psychic power has been amplified, but its physical strength has grown tremendously as well. It can crush boulders into powder with a single slap.",
+                heracross: "Mega Heracross's horn becomes enormous and gains tremendous power. It can lift objects 500 times its own weight with ease.",
+                blaziken: "Mega Blaziken's flames burn more intensely as its fighting spirit increases. Its powerful legs can deliver devastating kicks that crush concrete."
+            };
+            return entries[pokemonId];
+        }
+
+        // Initialize with Mewtwo
+        window.onload = function() {
+            showPokemon('mewtwo');
+        };
+    </script>
 </body>
 </html>
