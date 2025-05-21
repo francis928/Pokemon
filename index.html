@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
+            background-color: #a8d8ea; /* Changed from #f0f0f0 to light blue */
             margin: 0;
             padding: 20px;
             text-align: center;
@@ -59,6 +59,30 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
+        .video-container {
+            margin: 20px auto;
+            width: 100%;
+            max-width: 560px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
         button {
             background: #3d7dca;
             color: white;
@@ -68,6 +92,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: background 0.3s;
+            margin-top: 20px;
         }
         
         button:hover {
@@ -87,6 +112,10 @@
         <h2>Select a style to see preview</h2>
     </div>
     
+    <div class="video-container" id="videoContainer">
+        <!-- Video will be added here when a style is selected -->
+    </div>
+    
     <button id="selectButton">Choose This Style</button>
     
     <script>
@@ -100,42 +129,188 @@
             "Captain Style", "Castume Party Style", "Globiouss", "Color Style"
         ];
         
-        // Pokémon that might match each style
+        // Pokémon that might match each style with YouTube video IDs
         const stylePokemon = {
-            "Vanguard": { name: "Aegislash", type: "Steel/Ghost", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/681.png" },
-            "Tropical": { name: "Tropius", type: "Grass/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/357.png" },
-            "Pascha": { name: "Togekiss", type: "Fairy/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/468.png" },
-            "Lunette de Alois": { name: "Mienshao", type: "Fighting", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/620.png" },
-            "Magnum": { name: "Metagross", type: "Steel/Psychic", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/376.png" },
-            "Gengue": { name: "Gengar", type: "Ghost/Poison", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" },
-            "Sunshine Style": { name: "Solgaleo", type: "Psychic/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/791.png" },
-            "Honey Style": { name: "Combee", type: "Bug/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/415.png" },
-            "Fearnive": { name: "Hydreigon", type: "Dark/Dragon", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/635.png" },
-            "Sacred Style": { name: "Arceus", type: "Normal", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png" },
-            "Drum": { name: "Exploud", type: "Normal", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/295.png" },
-            "Aided Style": { name: "Gardevoir", type: "Psychic/Fairy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/282.png" },
-            "Mercet": { name: "Milotic", type: "Water", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/350.png" },
-            "Spice Style": { name: "Scovillain", type: "Grass/Fire", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/952.png" },
-            "Courage": { name: "Lucario", type: "Fighting/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png" },
-            "Soulak": { name: "Spiritomb", type: "Ghost/Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/442.png" },
-            "Chief": { name: "Samurott", type: "Water", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/503.png" },
-            "Monnie": { name: "Mimikyu", type: "Ghost/Fairy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/778.png" },
-            "Abad": { name: "Absol", type: "Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/359.png" },
-            "Locale": { name: "Leafeon", type: "Grass", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/470.png" },
-            "Quade": { name: "Quagsire", type: "Water/Ground", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/195.png" },
-            "Talendame": { name: "Alakazam", type: "Psychic", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/65.png" },
-            "Cook Style": { name: "Vanilluxe", type: "Ice", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/584.png" },
-            "Dark Star Style": { name: "Darkrai", type: "Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png" },
-            "Captain": { name: "Swampert", type: "Water/Ground", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/260.png" },
-            "Captain Style": { name: "Empoleon", type: "Water/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/395.png" },
-            "Castume Party Style": { name: "Oricorio", type: "Fire/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/741.png" },
-            "Globiouss": { name: "Goodra", type: "Dragon", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/706.png" },
-            "Color Style": { name: "Ho-Oh", type: "Fire/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png" }
+            "Vanguard": { 
+    name: "Aegislash", 
+    type: "Steel/Ghost", 
+    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/681.png",
+    video: "https://www.youtube.com/embed/80vpaR1bj0M"
+},
+            "Tropical": { 
+                name: "Tropius", 
+                type: "Grass/Flying", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/357.png",
+                video: "https://www.youtube.com/embed/zFCPB8XtDfo"
+            },
+            "Pascha": { 
+                name: "Togekiss", 
+                type: "Fairy/Flying", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/468.png",
+                video: "https://www.youtube.com/embed/PUf9WMUtRYc"
+            },
+            "Lunette de Alois": { 
+                name: "Mienshao", 
+                type: "Fighting", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/620.png",
+                video: "https://www.youtube.com/embed/6BV4KqNeTgw"
+            },
+            "Magnum": { 
+                name: "Metagross", 
+                type: "Steel/Psychic", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/376.png",
+                video: "https:/www.youtube.com/embed/U6KFgl-ceLU"
+            },
+            "Gengue": { 
+                name: "Gengar", 
+                type: "Ghost/Poison", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png",
+                video: "https://www.youtube.com/embed/jlmdboWcH4w"
+            },
+            "Sunshine Style": { 
+                name: "Solgaleo", 
+                type: "Psychic/Steel", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/791.png",
+                video: "https://www.youtube.com/embed/M6cZ299BG_E"
+            },
+            "Honey Style": { 
+                name: "Combee", 
+                type: "Bug/Flying", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/415.png",
+                video: "https://www.youtube.com/embed/aO5OmPfy5ak"
+            },
+            "Fearnive": { 
+                name: "Hydreigon", 
+                type: "Dark/Dragon", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/635.png",
+                video: "https://www.youtube.com/embed/9nEp1C20vcs"
+            },
+            "Sacred Style": { 
+                name: "Arceus", 
+                type: "Normal", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png",
+                video: "https://www.youtube.com/embed/HDxyXFjV-jE"
+            },
+            "Drum": { 
+                name: "Exploud", 
+                type: "Normal", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/295.png",
+                video: "https://www.youtube.com/embed/M7BOWdgt9So"
+            },
+            "Aided Style": { 
+                name: "Gardevoir", 
+                type: "Psychic/Fairy", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/282.png",
+                video: "https://www.youtube.com/embed/v9bKLjyh_a0"
+            },
+            "Mercet": { 
+                name: "Milotic", 
+                type: "Water", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/350.png",
+                video: "https://www.youtube.com/embed/vQ1uVset0iQ"
+            },
+            "Spice Style": { 
+                name: "Scovillain", 
+                type: "Grass/Fire", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/952.png",
+                video: "https://www.youtube.com/embed/MvIfTKmdQfM"
+            },
+            "Courage": { 
+                name: "Lucario", 
+                type: "Fighting/Steel", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png",
+                video: "https://www.youtube.com/embed/g-6znrdGm7Q"
+            },
+            "Soulak": { 
+                name: "Spiritomb", 
+                type: "Ghost/Dark", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/442.png",
+                video: "https://www.youtube.com/embed/xZE7LQTacbU"
+            },
+            "Chief": { 
+                name: "Samurott", 
+                type: "Water", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/503.png",
+                video: "https://www.youtube.com/embed/ALUgBsqAgQ8"
+            },
+            "Monnie": { 
+                name: "Mimikyu", 
+                type: "Ghost/Fairy", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/778.png",
+                video: "https://www.youtube.com/embed/kSgoPDLZo7Q"
+            },
+            "Abad": { 
+                name: "Absol", 
+                type: "Dark", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/359.png",
+                video: "https://www.youtube.com/embed/61gkoVTza2I"
+            },
+            "Locale": { 
+                name: "Leafeon", 
+                type: "Grass", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/470.png",
+                video: "https://www.youtube.com/embed/3-86GBQcIVI"
+            },
+            "Quade": { 
+                name: "Quagsire", 
+                type: "Water/Ground", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/195.png",
+                video: "https://www.youtube.com/embed/ByxzCyw2Ews"
+            },
+            "Talendame": { 
+                name: "Alakazam", 
+                type: "Psychic", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/65.png",
+                video: "https://www.youtube.com/embed/XKb7XBdcBO8"
+            },
+            "Cook Style": { 
+                name: "Vanilluxe", 
+                type: "Ice", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/584.png",
+                video: "https://www.youtube.com/embed/Rx3Bo1m1R8c"
+            },
+            "Dark Star Style": { 
+                name: "Darkrai", 
+                type: "Dark", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png",
+                video: "https://www.youtube.com/embed/VGvZOmGKg7A"
+            },
+            "Captain": { 
+                name: "Swampert", 
+                type: "Water/Ground", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/260.png",
+                video: "https://www.youtube.com/embed/Q5Qj7HRXDYc"
+            },
+            "Captain Style": { 
+                name: "Empoleon", 
+                type: "Water/Steel", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/395.png",
+                video: "https://www.youtube.com/embed/YMRZTw0YKX0"
+            },
+            "Castume Party Style": { 
+                name: "Oricorio", 
+                type: "Fire/Flying", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/741.png",
+                video: "https:/www.youtube.com/embed/oZSfcF0RTtk"
+            },
+            "Globiouss": { 
+                name: "Goodra", 
+                type: "Dragon", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/706.png",
+                video: "https://www.youtube.com/embed/_3LzX2Medcw"
+            },
+            "Color Style": { 
+                name: "Ho-Oh", 
+                type: "Fire/Flying", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png",
+                video: "https://www.youtube.com/embed/KzyDocFiWCk"
+            }
         };
         
         // Create style cards
         const styleContainer = document.getElementById('styleContainer');
         const previewArea = document.getElementById('previewArea');
+        const videoContainer = document.getElementById('videoContainer');
         const selectButton = document.getElementById('selectButton');
         
         let selectedStyle = null;
@@ -163,7 +338,8 @@
             const pokemon = stylePokemon[style] || { 
                 name: "Pikachu", 
                 type: "Electric", 
-                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+                video: "https://www.youtube.com/embed/1roy4o4tqQM"
             };
             
             previewArea.innerHTML = `
@@ -171,6 +347,18 @@
                 <img src="${pokemon.image}" alt="${pokemon.name}" style="height: 150px;">
                 <h3>${pokemon.name}</h3>
                 <p>Type: ${pokemon.type}</p>
+            `;
+            
+            // Update video
+            videoContainer.innerHTML = `
+                <div class="video-wrapper">
+                    <iframe src="${pokemon.video}?autoplay=1&mute=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <p>${pokemon.name} in action!</p>
             `;
         }
         
