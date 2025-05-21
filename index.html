@@ -3,315 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mega Pokémon Dashboard</title>
+    <title>Pokémon Style Selector</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
             margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
+            padding: 20px;
+            text-align: center;
         }
         
-        .dashboard {
+        h1 {
+            color: #e63946;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .style-container {
             display: grid;
-            grid-template-columns: 200px 1fr;
-            min-height: 100vh;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px auto;
+            max-width: 1000px;
         }
         
-        .type-sidebar {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-        }
-        
-        .type-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #34495e;
-        }
-        
-        .main-content {
-            padding: 20px;
-            background-color: white;
-        }
-        
-        .pokemon-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .pokemon-option {
-            padding: 8px 16px;
-            background-color: #e0e0e0;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .pokemon-option:hover {
-            background-color: #d0d0d0;
-        }
-        
-        .pokemon-option.active {
-            background-color: #5d5dff;
-            color: white;
-        }
-        
-        .pokemon-header {
-            background: linear-gradient(135deg, #5d5dff 0%, #3636a0 100%);
-            color: white;
-            padding: 20px;
+        .style-card {
+            background: white;
             border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
         
-        .type-tag {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-right: 5px;
-            font-size: 12px;
-            font-weight: bold;
+        .style-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .style-card.selected {
+            background: #ffcb05;
+            border: 2px solid #3d7dca;
+        }
+        
+        .preview-area {
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            max-width: 600px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            background: #3d7dca;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
         
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        
-        .stat-column {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .stat-row {
-            margin-bottom: 15px;
-        }
-        
-        .stat-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .stat-value {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .pokemon-description {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+        button:hover {
+            background: #2a5d9e;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="type-sidebar">
-            <div class="type-item">NORMAL</div>
-            <div class="type-item">2.3m</div>
-            <div class="type-item">127.0kg</div>
-            <div class="type-item">FIGHTING</div>
-            <div class="type-item">FLYING</div>
-            <div class="type-item">POISON</div>
-            <div class="type-item">GROUND</div>
-            <div class="type-item">ROCK</div>
-            <div class="type-item">BUG</div>
-            <div class="type-item">GHOST</div>
-            <div class="type-item">STEEL</div>
-            <div class="type-item">FIRE</div>
-            <div class="type-item">WATER</div>
-            <div class="type-item">GRASS</div>
-            <div class="type-item">ELECTRIC</div>
-            <div class="type-item">PSYCHIC</div>
-            <div class="type-item">ICE</div>
-        </div>
-        
-        <div class="main-content">
-            <div class="pokemon-selector">
-                <div class="pokemon-option active" onclick="showPokemon('mewtwo')">Mega Mewtwo X</div>
-                <div class="pokemon-option" onclick="showPokemon('heracross')">Mega Heracross</div>
-                <div class="pokemon-option" onclick="showPokemon('blaziken')">Mega Blaziken</div>
-            </div>
-            
-            <div id="pokemon-content">
-                <!-- Content will be loaded here by JavaScript -->
-            </div>
-        </div>
+    <h1>Pokémon Style Selector</h1>
+    <p>Choose your favorite style to see a matching Pokémon!</p>
+    
+    <div class="style-container" id="styleContainer">
+        <!-- Styles will be added here by JavaScript -->
     </div>
-
+    
+    <div class="preview-area" id="previewArea">
+        <h2>Select a style to see preview</h2>
+    </div>
+    
+    <button id="selectButton">Choose This Style</button>
+    
     <script>
-        // Pokémon data
-        const pokemonData = {
-            mewtwo: {
-                name: "Mega Mewtwo X",
-                category: "Genetic Pokémon",
-                types: ["FIGHTING", "PSYCHIC"],
-                ability: "Steadfast",
-                stats: {
-                    hp: 106,
-                    attack: 190,
-                    defense: 100,
-                    specialAttack: 154,
-                    specialDefense: 100,
-                    speed: 130
-                },
-                color: "#5d5dff"
-            },
-            heracross: {
-                name: "Mega Heracross",
-                category: "Single Horn Pokémon",
-                types: ["FIGHTING", "BUG"],
-                ability: "Skill Link",
-                stats: {
-                    hp: 80,
-                    attack: 185,
-                    defense: 115,
-                    specialAttack: 40,
-                    specialDefense: 105,
-                    speed: 75
-                },
-                color: "#c03028"
-            },
-            blaziken: {
-                name: "Mega Blaziken",
-                category: "Blaze Pokémon",
-                types: ["FIRE", "FIGHTING"],
-                ability: "Speed Boost",
-                stats: {
-                    hp: 80,
-                    attack: 160,
-                    defense: 80,
-                    specialAttack: 130,
-                    specialDefense: 80,
-                    speed: 100
-                },
-                color: "#f08030"
-            }
+        // List of styles from your image
+        const styles = [
+            "Vanguard", "Tropical", "Pascha", "Lunette de Alois", "Magnum",
+            "Gengue", "Sunshine Style", "Honey Style", "Fearnive", "Sacred Style",
+            "Drum", "Aided Style", "Mercet", "Spice Style", "Courage",
+            "Soulak", "Chief", "Monnie", "Abad", "Locale",
+            "Quade", "Talendame", "Cook Style", "Dark Star Style", "Captain",
+            "Captain Style", "Castume Party Style", "Globiouss", "Color Style"
+        ];
+        
+        // Pokémon that might match each style
+        const stylePokemon = {
+            "Vanguard": { name: "Aegislash", type: "Steel/Ghost", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/681.png" },
+            "Tropical": { name: "Tropius", type: "Grass/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/357.png" },
+            "Pascha": { name: "Togekiss", type: "Fairy/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/468.png" },
+            "Lunette de Alois": { name: "Mienshao", type: "Fighting", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/620.png" },
+            "Magnum": { name: "Metagross", type: "Steel/Psychic", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/376.png" },
+            "Gengue": { name: "Gengar", type: "Ghost/Poison", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" },
+            "Sunshine Style": { name: "Solgaleo", type: "Psychic/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/791.png" },
+            "Honey Style": { name: "Combee", type: "Bug/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/415.png" },
+            "Fearnive": { name: "Hydreigon", type: "Dark/Dragon", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/635.png" },
+            "Sacred Style": { name: "Arceus", type: "Normal", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png" },
+            "Drum": { name: "Exploud", type: "Normal", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/295.png" },
+            "Aided Style": { name: "Gardevoir", type: "Psychic/Fairy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/282.png" },
+            "Mercet": { name: "Milotic", type: "Water", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/350.png" },
+            "Spice Style": { name: "Scovillain", type: "Grass/Fire", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/952.png" },
+            "Courage": { name: "Lucario", type: "Fighting/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png" },
+            "Soulak": { name: "Spiritomb", type: "Ghost/Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/442.png" },
+            "Chief": { name: "Samurott", type: "Water", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/503.png" },
+            "Monnie": { name: "Mimikyu", type: "Ghost/Fairy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/778.png" },
+            "Abad": { name: "Absol", type: "Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/359.png" },
+            "Locale": { name: "Leafeon", type: "Grass", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/470.png" },
+            "Quade": { name: "Quagsire", type: "Water/Ground", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/195.png" },
+            "Talendame": { name: "Alakazam", type: "Psychic", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/65.png" },
+            "Cook Style": { name: "Vanilluxe", type: "Ice", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/584.png" },
+            "Dark Star Style": { name: "Darkrai", type: "Dark", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png" },
+            "Captain": { name: "Swampert", type: "Water/Ground", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/260.png" },
+            "Captain Style": { name: "Empoleon", type: "Water/Steel", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/395.png" },
+            "Castume Party Style": { name: "Oricorio", type: "Fire/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/741.png" },
+            "Globiouss": { name: "Goodra", type: "Dragon", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/706.png" },
+            "Color Style": { name: "Ho-Oh", type: "Fire/Flying", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png" }
         };
-
-        // Type colors
-        const typeColors = {
-            NORMAL: "#A8A878",
-            FIGHTING: "#C03028",
-            FLYING: "#A890F0",
-            POISON: "#A040A0",
-            GROUND: "#E0C068",
-            ROCK: "#B8A038",
-            BUG: "#A8B820",
-            GHOST: "#705898",
-            STEEL: "#B8B8D0",
-            FIRE: "#F08030",
-            WATER: "#6890F0",
-            GRASS: "#78C850",
-            ELECTRIC: "#F8D030",
-            PSYCHIC: "#F85888",
-            ICE: "#98D8D8",
-            DRAGON: "#7038F8",
-            DARK: "#705848",
-            FAIRY: "#EE99AC"
-        };
-
-        // Show selected Pokémon
-        function showPokemon(pokemonId) {
-            const pokemon = pokemonData[pokemonId];
+        
+        // Create style cards
+        const styleContainer = document.getElementById('styleContainer');
+        const previewArea = document.getElementById('previewArea');
+        const selectButton = document.getElementById('selectButton');
+        
+        let selectedStyle = null;
+        
+        styles.forEach(style => {
+            const card = document.createElement('div');
+            card.className = 'style-card';
+            card.textContent = style;
             
-            // Update active selection
-            document.querySelectorAll('.pokemon-option').forEach(option => {
-                option.classList.remove('active');
+            card.addEventListener('click', () => {
+                // Remove selected class from all cards
+                document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+                // Add to clicked card
+                card.classList.add('selected');
+                selectedStyle = style;
+                
+                // Update preview
+                updatePreview(style);
             });
-            event.target.classList.add('active');
             
-            // Update content
-            document.getElementById('pokemon-content').innerHTML = `
-                <div class="pokemon-header" style="background: linear-gradient(135deg, ${pokemon.color} 0%, ${darkenColor(pokemon.color, 20)} 100%)">
-                    <h1>${pokemon.name}</h1>
-                    <p>${pokemon.category}</p>
-                    <div>
-                        ${pokemon.types.map(type => `
-                            <span class="type-tag" style="background-color: ${typeColors[type]}">${type}</span>
-                        `).join('')}
-                    </div>
-                    <p>Ability: <strong>${pokemon.ability}</strong></p>
-                </div>
-                
-                <div class="stats-container">
-                    <div class="stat-column">
-                        <div class="stat-row">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-value">${pokemon.stats.hp}</div>
-                        </div>
-                        <div class="stat-row">
-                            <div class="stat-name">Attack</div>
-                            <div class="stat-value">${pokemon.stats.attack}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-column">
-                        <div class="stat-row">
-                            <div class="stat-name">Defense</div>
-                            <div class="stat-value">${pokemon.stats.defense}</div>
-                        </div>
-                        <div class="stat-row">
-                            <div class="stat-name">Special Attack</div>
-                            <div class="stat-value">${pokemon.stats.specialAttack}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-column">
-                        <div class="stat-row">
-                            <div class="stat-name">Special Defense</div>
-                            <div class="stat-value">${pokemon.stats.specialDefense}</div>
-                        </div>
-                        <div class="stat-row">
-                            <div class="stat-name">Speed</div>
-                            <div class="stat-value">${pokemon.stats.speed}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pokemon-description">
-                    <h3>Pokédex Entry</h3>
-                    <p>${getPokedexEntry(pokemonId)}</p>
-                </div>
+            styleContainer.appendChild(card);
+        });
+        
+        function updatePreview(style) {
+            const pokemon = stylePokemon[style] || { 
+                name: "Pikachu", 
+                type: "Electric", 
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" 
+            };
+            
+            previewArea.innerHTML = `
+                <h2>${style}</h2>
+                <img src="${pokemon.image}" alt="${pokemon.name}" style="height: 150px;">
+                <h3>${pokemon.name}</h3>
+                <p>Type: ${pokemon.type}</p>
             `;
         }
-
-        // Helper function to darken colors
-        function darkenColor(color, percent) {
-            const num = parseInt(color.replace("#", ""), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) - amt;
-            const G = (num >> 8 & 0x00FF) - amt;
-            const B = (num & 0x0000FF) - amt;
-            return "#" + (
-                0x1000000 +
-                (R < 0 ? 0 : R) * 0x10000 +
-                (G < 0 ? 0 : G) * 0x100 +
-                (B < 0 ? 0 : B)
-            ).toString(16).slice(1);
+        
+        selectButton.addEventListener('click', () => {
+            if (selectedStyle) {
+                alert(`You selected ${selectedStyle} style!`);
+                // Here you would typically apply the style or navigate to another page
+            } else {
+                alert('Please select a style first');
+            }
+        });
+        
+        // Initialize with first style
+        if (styles.length > 0) {
+            document.querySelector('.style-card').click();
         }
-
-        // Pokédex entries
-        function getPokedexEntry(pokemonId) {
-            const entries = {
-                mewtwo: "Mega Mewtwo X's psychic power has been amplified, but its physical strength has grown tremendously as well. It can crush boulders into powder with a single slap.",
-                heracross: "Mega Heracross's horn becomes enormous and gains tremendous power. It can lift objects 500 times its own weight with ease.",
-                blaziken: "Mega Blaziken's flames burn more intensely as its fighting spirit increases. Its powerful legs can deliver devastating kicks that crush concrete."
-            };
-            return entries[pokemonId];
-        }
-
-        // Initialize with Mewtwo
-        window.onload = function() {
-            showPokemon('mewtwo');
-        };
     </script>
 </body>
 </html>
